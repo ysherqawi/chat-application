@@ -10,8 +10,14 @@ const io = socketio(server);
 const publicDirectoryPath = path.join(__dirname, '../public');
 app.use(express.static(publicDirectoryPath));
 
-io.on('connection', () => {
+io.on('connection', (socket) => {
   console.log('New WebSocket Connection');
+
+  socket.emit('message', 'Welcome !');
+
+  socket.on('sendMessage', (data) => {
+    io.emit('message', data);
+  });
 });
 
 const PORT = process.env.PORT || 3000;
